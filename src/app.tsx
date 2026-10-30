@@ -38,5 +38,13 @@ export function createApp(config: RigConfig = loadConfig()) {
     );
   });
 
+  // Agents read this; it serves exactly what readNight returns.
+  app.get('/api/digest/:night', (c) => {
+    const night = c.req.param('night');
+    const result = readNight(config.runsDir, night);
+    if (!result) return c.json({ error: 'no such night', night }, 404);
+    return c.json(result);
+  });
+
   return app;
 }
